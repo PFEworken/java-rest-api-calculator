@@ -36,5 +36,14 @@ pipeline {
                 dependencyCheck additionalArguments: '--scan . --format HTML', odcInstallation: 'DP'
             }
         }
+        stage('Build & Push Docker Image') {
+            steps {
+                withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u pfeework -p ${dockerHubPwd}"
+                }
+                sh "docker build -t pfeework/calcul -f Dockerfile ."
+                sh "docker push pfeework/calcul"
+            }
+        }
     }
 }
