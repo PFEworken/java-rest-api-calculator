@@ -9,4 +9,12 @@ pipeline {
             steps {
                 git changelog: false, poll: false, url: 'https://github.com/PFEworken/java-rest-api-calculator.git'
             }
-        }}}
+        }
+        stage('Compile & Test :Maven '){
+            steps{
+                sh "mvn clean compile"
+                sh "mvn test"
+            }
+        }
+    }
+}
