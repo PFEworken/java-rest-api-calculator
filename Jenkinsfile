@@ -45,5 +45,28 @@ pipeline {
                 sh "docker push pfeework/calcul"
             }
         }
+        stage('Docker Deploy ') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
+                        sh "docker login -u pfeework -p ${dockerHubPwd}"
+
+                        // Define your container name
+                        def CONTAINER_NAME = "calcul"
+
+                        // Check if the container exists
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -w ${CONTAINER_NAME}", returnStatus: true)
+
+                        // If container exists, stop and remove it
+                        if (containerExists == 0) {
+                            sh "docker stop ${CONTAINER_NAME}"
+                            sh "docker rm ${CONTAINER_NAME}"
+                        }
+
+                        // Now run the new container
+                        sh "docker run -d --name ${CONTAINER_NAME} -p 8070:8070 pfeework/calcul"
+                    }
+                }
+            }
     }
-}
+}}
