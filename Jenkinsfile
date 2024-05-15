@@ -26,5 +26,10 @@ pipeline {
                 sh "$SCANNER_HOME/bin/sonar-scanner -X -Dsonar.url='http://20.51.234.67:9000/' -Dsonar.login=squ_c423ee1a190b9fb2721ce9398064e1314bd449bb -Dsonar.projectName=calcul -Dsonar.projectKey=calcul -Dsonar.java.binaries=target/classes"
             }
         }
+        stage('Build'){
+            steps{
+                sh "mvn clean install"
+            }
+        }
     }
 }
