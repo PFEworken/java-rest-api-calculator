@@ -31,5 +31,10 @@ pipeline {
                 sh "mvn clean install"
             }
         }
+        stage('OWASP') {
+            steps {
+                dependencyCheck additionalArguments: '--scan . --format HTML', odcInstallation: 'DP'
+            }
+        }
     }
 }
